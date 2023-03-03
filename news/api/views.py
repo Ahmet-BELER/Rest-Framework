@@ -69,12 +69,15 @@ class ArticleListCreateView(APIView):
             return Response(serializer.data ,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class CommentsCreateView(CreateModelMixin,ListModelMixin,GenericAPIView):
+class CommentsCreateView(generics.ListCreateAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializers
-    def get(self,request,*args,**kwargs):
-     
-        return self.list(re)
+
+class CommentsDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializers
+
+          
     
 class ArticleDetailAPIView(APIView):
     
@@ -102,3 +105,4 @@ class ArticleDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
  
 
+  
