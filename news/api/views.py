@@ -7,8 +7,13 @@ from .serializers import ArticleSerializers,AuthorSerializer,CommentsSerializers
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework.mixins import ListModelMixin , CreateModelMixin
+from rest_framework import generics
 
-class AuthorListCreateView(APIView):
+class AuthorListCreateView(generics.ListCreateAPIView):
+    queryset= Author.objects.all()
+    serializer_class= AuthorSerializer
+
+''' class AuthorListCreateView(APIView):
     def get(self,request):
         author = Author.objects.all()
         serializer=AuthorSerializer(author, many=True ,context={'request': request})
@@ -22,7 +27,7 @@ class AuthorListCreateView(APIView):
             return Response(serializer.data ,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+ '''
 class AuthorDetailView(APIView):
     def get_object(self,id):
         author_instance = get_object_or_404(Author,id=id)
