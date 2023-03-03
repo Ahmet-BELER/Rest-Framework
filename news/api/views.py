@@ -92,5 +92,5 @@ class ArticleDetailAPIView(APIView):
         article=self.get_object(id=id)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+ 
 
