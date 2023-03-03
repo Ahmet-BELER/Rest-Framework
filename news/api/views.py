@@ -12,7 +12,10 @@ from rest_framework import generics
 class AuthorListCreateView(generics.ListCreateAPIView):
     queryset= Author.objects.all()
     serializer_class= AuthorSerializer
-
+ 
+class  AuthorDetailView(generics.RetrieveUpdateDestroyAPIView):
+     queryset= Author.objects.all()
+     serializer_class= AuthorSerializer
 ''' class AuthorListCreateView(APIView):
     def get(self,request):
         author = Author.objects.all()
@@ -28,7 +31,7 @@ class AuthorListCreateView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
  '''
-class AuthorDetailView(APIView):
+''' class AuthorDetailView(APIView):
     def get_object(self,id):
         author_instance = get_object_or_404(Author,id=id)
         return author_instance
@@ -51,7 +54,7 @@ class AuthorDetailView(APIView):
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+ '''
 class ArticleListCreateView(APIView):
     def get(self,request):
         article = Article.objects.filter(active=True)
