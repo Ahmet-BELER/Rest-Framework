@@ -4,4 +4,4 @@ from news.models import Article,Author,Comments
 
 admin.site.register(Article)
 admin.site.register(Author)
-admin.site.register(Comments)
+admin.site.register(Comments) 
