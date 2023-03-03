@@ -1,8 +1,6 @@
 from unicodedata import name
 from django.db import models
-
-# Create your models here.
-from django.db import models
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Create your models here.
 class Author(models.Model):
@@ -27,3 +25,20 @@ class Article(models.Model):
     
     def __str__(self):
         return self.header  
+    
+class Comments (models.Model):
+    
+    article = models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments')    
+    comments_owner = models.CharField(max_length=50)
+    comments = models.TextField(blank= True,null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True) 
+    
+    evaluate = models.PositiveIntegerField(
+        validators= [MinValueValidator(1),MaxValueValidator(5)],
+    )
+    
+    def __str__(self):
+        return  str(self.evaluate)  
+    
+    

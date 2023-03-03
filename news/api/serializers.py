@@ -1,14 +1,18 @@
 from rest_framework import serializers 
-from news.models import Article,Author
+from news.models import Article,Author,Comments
 from datetime import datetime, date
 from django.utils.timesince import timesince
 
 
 
+class CommentsSerializers(serializers.ModelSerializer):
+    class Meta : 
+        model = Comments      
+        fields = '__all__'   
+        
 class ArticleSerializers(serializers.ModelSerializer):
     time_since_pub= serializers.SerializerMethodField()
-    #author= serializers.StringRelatedField()
-    
+    comments= CommentsSerializers(many=True, read_only=True )
     class Meta:
         model = Article
         fields = '__all__'
@@ -33,26 +37,17 @@ class ArticleSerializers(serializers.ModelSerializer):
         
         else:
             return datevalue
-        
-        
+
 class AuthorSerializer(serializers.ModelSerializer):
     
     articles = ArticleSerializers(many=True, read_only=True) 
-    #articles= serializers.HyperlinkedRelatedField(
-        # many=True,
-      #  read_only=True, 
-       
-       # view_name ="article-detay",
-        #)
+
     class Meta: 
      model = Author
      fields = '__all__'
         
-    
-            
-        
-        
-        
+             
+
         
         
         

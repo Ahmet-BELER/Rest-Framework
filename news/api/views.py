@@ -2,11 +2,11 @@
 from rest_framework import status 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
-from news.models import Article , Author
-from .serializers import ArticleSerializers,AuthorSerializer
+from news.models import Article , Author,Comments
+from .serializers import ArticleSerializers,AuthorSerializer,CommentsSerializers
 from rest_framework.views import APIView
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.mixins import ListModelMixin , CreateModelMixin
 
 class AuthorListCreateView(APIView):
     def get(self,request):
@@ -23,6 +23,28 @@ class AuthorListCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+class AuthorDetailView(APIView):
+    def get_object(self,id):
+        author_instance = get_object_or_404(Author,id=id)
+        return author_instance
+
+    def get(self,request,id):
+        author = self.get_object(id=id)
+        serializer = AuthorSerializer(author)
+        return Response(serializer.data)
+    
+    def put(self,request,id):
+        author = self.get_object(id=id)
+        serializer =  AuthorSerializer(author,data=request.data)
+        if serializer.is_valid():
+         return Response(serializer.data)
+     
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,id):
+        author = self.get_object(id=id)
+        author.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ArticleListCreateView(APIView):
@@ -39,8 +61,12 @@ class ArticleListCreateView(APIView):
             return Response(serializer.data ,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
-    
+class CommentsCreateView(CreateModelMixin,ListModelMixin,GenericAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializers
+    def get(self,request,*args,**kwargs):
+     
+        return self.list(re)
     
 class ArticleDetailAPIView(APIView):
     
@@ -66,6 +92,5 @@ class ArticleDetailAPIView(APIView):
         article=self.get_object(id=id)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 
