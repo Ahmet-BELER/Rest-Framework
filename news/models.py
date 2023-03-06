@@ -1,7 +1,7 @@
 from unicodedata import name
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator
-
+from django.contrib.auth.models import User
 # Create your models here.
 class Author(models.Model):
     name= models.CharField(max_length=100)
@@ -19,7 +19,7 @@ class Article(models.Model):
     text= models.TextField()
     city= models.CharField(max_length=100)
     release_date= models.DateField()
-    active= models.BooleanField(default=True)
+    active= models.BooleanField(default=True) 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     
@@ -28,8 +28,9 @@ class Article(models.Model):
     
 class Comments (models.Model):
     
-    article = models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments')    
-    comments_owner = models.CharField(max_length=50)
+    article = models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments')   
+    ''' comments_owner = models.TextField(max_length=255)  '''
+    comments_owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name='users_comment')
     comments = models.TextField(blank= True,null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True) 
